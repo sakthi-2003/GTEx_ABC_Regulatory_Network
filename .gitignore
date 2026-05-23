@@ -1,0 +1,25 @@
+# R artifacts
+.Rhistory
+.RData
+.Ruserdata
+*.rds
+*.Rds
+
+# Local data files
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/external/*
+!data/external/.gitkeep
+
+# OS and editor metadata
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.log
+~$*
