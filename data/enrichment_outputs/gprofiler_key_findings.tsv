@@ -1,0 +1,6 @@
+term_group	enrichment_signal	biological_interpretation
+RNA splicing	Strong enrichment	Hub-associated genes converge on pre-mRNA splicing and RNA maturation processes.
+mRNA processing	Strong enrichment	The network is organized around genes involved in processing mature transcripts.
+KEGG spliceosome	Enriched	The integrated network captures spliceosome-associated regulatory machinery.
+RNA-binding proteins	Enriched	Topological hubs are concentrated among RNA-binding and ribonucleoprotein-associated genes.
+Post-transcriptional regulation	Enriched	Enhancer-linked co-expression architecture highlights RNA-level regulatory mechanisms.
