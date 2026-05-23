@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+title: "Integrative Multi-Omics Regulatory Network Analysis using GTEx Co-expression and ABC Enhancer-Gene Interactions"
+message: "If you use or reference this project, please cite it using the metadata in this file."
+type: software
+authors:
+  - family-names: "Sakthi"
+repository-code: "https://github.com/sakthi-2003/GTEx_ABC_Regulatory_Network"
+keywords:
+  - bioinformatics
+  - computational biology
+  - GTEx
+  - ABC enhancer-gene interactions
+  - co-expression networks
+  - Cytoscape
+  - g:Profiler
+  - RNA splicing
+license: MIT
