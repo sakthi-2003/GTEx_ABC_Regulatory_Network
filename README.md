@@ -211,6 +211,7 @@ Overall, this analysis suggests that integrating enhancer-gene interaction maps 
 | `12_hub_gene_analysis.R` | Extract hub genes and network topology metrics. |
 | `13_enrichment_summary.R` | Create a compact enrichment findings table. |
 | `14_plot_results.R` | Generate publication-style hub gene plots. |
+| `15_hub_gene_regulatory_class_analysis.R` | Summarize hub gene regulatory classes and downstream interpretation. |
 
 ---
 
