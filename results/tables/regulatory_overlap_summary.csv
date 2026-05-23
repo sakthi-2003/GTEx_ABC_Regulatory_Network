@@ -1,0 +1,4 @@
+regulatory_class,interpretation,representative_hub_genes
+RNA-binding proteins,Hub genes are strongly represented by RNA-binding and ribonucleoprotein-associated regulators,"NONO; HNRNPK; HNRNPD; DHX9; KHDRBS1"
+Splicing factors and spliceosome regulators,Central network genes include core and auxiliary spliceosomal regulators,"PRPF8; TRA2B; SNRNP200; ACIN1; SNW1"
+Transcription factors,Transcription factor comparison provides a regulatory baseline against RNA-centric hub enrichment,"See regulatory annotation workflow"
