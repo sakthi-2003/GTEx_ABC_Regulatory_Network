@@ -286,7 +286,3 @@ Overall, this analysis suggests that integrating enhancer-gene interaction maps 
 **Recommended topics/tags:**
 
 `bioinformatics`, `computational-biology`, `multi-omics`, `gtex`, `abc-model`, `enhancer-gene-interactions`, `gene-regulatory-networks`, `coexpression-network`, `network-biology`, `cytoscape`, `gprofiler`, `functional-enrichment`, `rna-binding-proteins`, `spliceosome`, `post-transcriptional-regulation`, `systems-biology`, `rstats`
-
-## 💼 LinkedIn-Ready Summary
-
-I developed an integrative multi-omics regulatory network analysis combining GTEx gene co-expression data with ABC enhancer-gene interaction maps to identify biologically meaningful regulatory hubs. After filtering highly variable genes, constructing a Pearson correlation-based co-expression network, integrating enhancer-gene links, and analyzing network topology in Cytoscape, the project identified central hub genes including `NONO`, `HNRNPK`, `HNRNPD`, `DHX9`, `PRPF8`, `TRA2B`, `KHDRBS1`, `SNRNP200`, `ACIN1`, and `SNW1`. Functional enrichment with g:Profiler revealed strong enrichment for RNA splicing, mRNA processing, spliceosome pathways, RNA-binding proteins, and post-transcriptional regulation, suggesting that the integrated GTEx-ABC network is organized around RNA regulatory mechanisms.
