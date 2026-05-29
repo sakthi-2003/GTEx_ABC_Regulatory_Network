@@ -11,35 +11,31 @@
 
 ## Overview
 
-This project builds an integrative regulatory network by combining GTEx transcriptomic co-expression patterns with ABC enhancer-gene interaction data. The goal is to identify highly connected genes and regulatory modules that link gene expression structure to putative enhancer-mediated regulation.
+This project integrates GTEx transcriptomic co-expression data with ABC enhancer-gene interaction maps to identify regulatory hubs in a multi-omics gene regulatory network. The analysis combines expression-based network structure, enhancer-gene regulatory links, Cytoscape topology metrics, hub gene annotation, and functional enrichment interpretation.
 
-The analysis integrates GTEx-derived gene expression profiles, highly variable gene selection, Pearson correlation-based co-expression network construction, ABC enhancer-gene interaction filtering and integration, Cytoscape-based network topology analysis, hub gene detection, functional enrichment analysis with g:Profiler, and comparison of hub genes against RNA-binding proteins, splicing factors, and transcription factors.
-
-**Main conclusion:** the integrated GTEx-ABC regulatory network is strongly organized around RNA-binding proteins, spliceosomal regulators, and post-transcriptional regulatory mechanisms.
+**Main conclusion:** the integrated GTEx-ABC network is strongly organized around RNA-binding proteins, spliceosomal regulators, mRNA processing factors, and post-transcriptional regulatory mechanisms.
 
 ---
 
 ## Biological Motivation
 
-Gene regulatory programs are shaped by both transcriptional coordination and enhancer-mediated regulation. GTEx co-expression captures genes that vary together across transcriptomic samples, while ABC enhancer-gene maps provide candidate regulatory links between noncoding regulatory elements and target genes.
-
-By integrating these two layers, this project asks a systems-level question: **which genes become central when expression similarity and enhancer-linked regulation are considered together?** The resulting network highlights regulatory hubs that may coordinate broad RNA-processing programs across the transcriptome.
+Gene regulation is shaped by both transcriptional coordination and enhancer-mediated control. GTEx co-expression captures genes that vary together across transcriptomic samples, while ABC enhancer-gene maps identify candidate regulatory links between enhancers and target genes. Integrating these layers helps reveal genes that are central not only by expression similarity, but also by regulatory network architecture.
 
 ---
 
-## Workflow Diagram
+## Workflow
 
 ```mermaid
 flowchart LR
-    A["GTEx expression matrix"] --> B["Gene filtering"]
-    B --> C["Highly variable genes"]
+    A["GTEx expression matrix"] --> B["Filter expressed genes"]
+    B --> C["Select highly variable genes"]
     C --> D["Pearson correlation matrix"]
     D --> E["Co-expression network"]
-    F["ABC enhancer-gene links"] --> G["High-confidence ABC filtering"]
+    F["ABC enhancer-gene interactions"] --> G["High-confidence ABC links"]
     E --> H["Integrated GTEx-ABC network"]
     G --> H
     H --> I["Cytoscape topology analysis"]
-    I --> J["Hub gene discovery"]
+    I --> J["Hub gene detection"]
     J --> K["RBP / splicing factor / TF comparison"]
     J --> L["g:Profiler enrichment"]
     L --> M["Biological interpretation"]
@@ -47,47 +43,39 @@ flowchart LR
 
 ---
 
+## Three-Script Analysis Workflow
+
+| Script | Purpose |
+| --- | --- |
+| `scripts/01_build_gtex_coexpression_network.R` | Loads GTEx expression data, filters genes, selects highly variable genes, computes Pearson correlations, and exports the co-expression edge list. |
+| `scripts/02_integrate_abc_and_export_network.R` | Maps Ensembl IDs to gene symbols, filters ABC enhancer-gene links, integrates ABC targets with the co-expression network, and exports Cytoscape-ready network files. |
+| `scripts/03_analyze_hubs_enrichment_and_plots.R` | Summarizes hub genes, regulatory-class overlaps, enrichment findings, and publication-style hub gene plots. |
+
+This compact workflow replaces the earlier step-by-step script layout and gives the repository a cleaner, more professional research-pipeline structure.
+
+---
+
 ## Methods
 
-### 1. GTEx Expression Processing
+### GTEx Co-expression Network
 
-GTEx transcriptomic data were loaded and filtered to remove genes with low or uninformative expression. This reduced technical noise and focused downstream analysis on genes with meaningful expression variation across samples.
+GTEx expression profiles were filtered to retain genes expressed above a TPM threshold in a sufficient fraction of samples. Highly variable genes were selected, log-transformed, and used to compute a Pearson correlation matrix. Strong gene-gene correlations were retained as co-expression network edges.
 
-### 2. Highly Variable Gene Selection
+### ABC Enhancer-Gene Integration
 
-Highly variable genes were prioritized to capture the most informative expression signals. This improves network interpretability by focusing the correlation analysis on genes with stronger biological variability.
+ABC enhancer-gene interactions were filtered for high-confidence links and mapped to genes present in the co-expression network. This produced an integrated regulatory network connecting transcriptomic co-expression structure with enhancer-gene regulatory evidence.
 
-### 3. Co-expression Network Construction
+### Network Topology and Hub Detection
 
-A Pearson correlation matrix was computed across selected genes. Strong gene-gene correlations were retained as network edges, producing a co-expression graph where nodes represent genes and edges represent coordinated expression patterns.
+Network files were exported for Cytoscape. Topological metrics including degree, betweenness centrality, closeness centrality, and clustering coefficient were used to prioritize hub genes.
 
-### 4. ABC Enhancer-Gene Integration
+### Functional Enrichment
 
-Activity-by-Contact enhancer-gene links were filtered for high-confidence interactions and mapped onto genes present in the co-expression network. This added a regulatory genomics layer to the transcriptomic network.
-
-### 5. Cytoscape Network Topology Analysis
-
-The integrated network was exported for Cytoscape analysis. Network topology metrics were used to identify highly connected genes and prioritize candidate regulatory hubs.
-
-### 6. Functional Enrichment Analysis
-
-Hub genes and network-associated gene sets were analyzed with g:Profiler to identify enriched Gene Ontology terms, pathways, and biological processes.
-
-### 7. Regulatory Class Comparison
-
-Top hub genes were compared against known RNA-binding proteins, splicing factors, and transcription factors to determine whether specific regulatory classes were overrepresented among central network nodes.
+Hub-associated genes were interpreted using g:Profiler enrichment results, with emphasis on RNA splicing, mRNA processing, KEGG spliceosome enrichment, RNA-binding proteins, and post-transcriptional regulation.
 
 ---
 
 ## Results
-
-### Integrated Network Architecture
-
-The GTEx co-expression network, after integration with ABC enhancer-gene interactions, revealed a regulatory structure enriched for genes involved in RNA processing and post-transcriptional regulation.
-
-```markdown
-![Cytoscape network visualization](figures/network/cytoscape_network.tsv.png)
-```
 
 ### Top Hub Genes
 
@@ -104,22 +92,14 @@ The GTEx co-expression network, after integration with ABC enhancer-gene interac
 | 9 | `ACIN1` | 196 | RNA splicing-associated protein |
 | 10 | `SNW1` | 208 | Splicing and transcriptional co-regulatory factor |
 
-Figure placeholders:
-
-```markdown
-![Top hub genes by network centrality](figures/hub_genes/top_hub_genes.png)
-![Hub genes by regulatory class](figures/hub_genes/hub_gene_regulatory_classes.png)
-```
-
 Tracked result tables:
 
 - [Top hub genes](results/tables/top_hub_genes.csv)
 - [Regulatory overlap summary](results/tables/regulatory_overlap_summary.csv)
 - [Network topology metrics](results/networks/cytoscape_networks_genes.csv)
+- [Functional enrichment summary](results/enrichment/gprofiler_key_findings.tsv)
 
 ### Functional Enrichment Findings
-
-Functional enrichment analysis showed strong enrichment for RNA-centric regulatory processes, including RNA splicing, mRNA processing, spliceosome-associated pathways, RNA-binding proteins, and post-transcriptional regulation.
 
 | Enrichment Signal | Interpretation |
 | --- | --- |
@@ -129,37 +109,20 @@ Functional enrichment analysis showed strong enrichment for RNA-centric regulato
 | RNA-binding proteins | Topological hubs are enriched for RNA-binding and ribonucleoprotein-associated genes. |
 | Post-transcriptional regulation | Enhancer-linked co-expression architecture highlights RNA-level regulation. |
 
+### Figure Placeholders
+
 ```markdown
+![Cytoscape network visualization](figures/network/cytoscape_network.tsv.png)
+![Top hub genes by network centrality](figures/hub_genes/top_hub_genes.png)
+![Hub genes by regulatory class](figures/hub_genes/hub_gene_regulatory_classes.png)
 ![g:Profiler enrichment plot](figures/enrichment/gProfiler_hsapiens.png)
-![Functional enrichment dot plot](figures/enrichment/enrichment_dotplot.png)
-![Functional enrichment bar plot](figures/enrichment/enrichment_barplot.png)
 ```
 
-Curated enrichment summary: [results/enrichment/gprofiler_key_findings.tsv](results/enrichment/gprofiler_key_findings.tsv)
-
 ---
 
-## RBP and Spliceosome Interpretation
+## Biological Interpretation
 
-The central genes in the integrated GTEx-ABC network are not random high-degree nodes. They are concentrated among RNA-binding proteins and spliceosomal regulators, suggesting that post-transcriptional regulation is a major organizing axis of the network.
-
-Several hub genes, including `NONO`, `HNRNPK`, `HNRNPD`, `DHX9`, and `PRPF8`, have well-established roles in RNA metabolism, splicing, transcript stability, and ribonucleoprotein complex function. The enrichment of spliceosome and mRNA processing pathways supports a model in which enhancer-linked regulatory architecture converges on genes involved in RNA maturation and post-transcriptional control.
-
-Overall, this analysis suggests that integrating enhancer-gene interaction maps with co-expression topology can reveal regulatory hubs that are not only highly connected, but also biologically coherent.
-
----
-
-## Technologies Used
-
-| Category | Tools |
-| --- | --- |
-| Programming | R, data.table, ggplot2 |
-| Transcriptomics | GTEx expression data |
-| Regulatory genomics | ABC enhancer-gene interactions |
-| Network analysis | Pearson correlation, graph edge filtering, Cytoscape |
-| Functional enrichment | g:Profiler |
-| Visualization | Cytoscape, hub gene plots, enrichment plots |
-| Reproducibility | Ordered scripts, structured results directories, GitHub documentation |
+The integrated GTEx-ABC regulatory network is enriched for RNA-binding proteins and spliceosomal regulators rather than generic high-degree genes. Hub genes such as `NONO`, `HNRNPK`, `HNRNPD`, `DHX9`, `PRPF8`, `TRA2B`, `KHDRBS1`, `SNRNP200`, `ACIN1`, and `SNW1` support a model in which enhancer-linked co-expression architecture converges on RNA maturation, spliceosome function, and post-transcriptional regulation.
 
 ---
 
@@ -182,50 +145,42 @@ Overall, this analysis suggests that integrating enhancer-gene interaction maps 
 |   |-- network/
 |   |-- enrichment/
 |   `-- hub_genes/
-|-- notebooks/
-|-- references/
 |-- results/
 |   |-- networks/
 |   |-- enrichment/
 |   `-- tables/
-`-- scripts/
+|-- scripts/
+|   |-- 01_build_gtex_coexpression_network.R
+|   |-- 02_integrate_abc_and_export_network.R
+|   `-- 03_analyze_hubs_enrichment_and_plots.R
+`-- archive/
+    `-- legacy_scripts/
 ```
 
 ---
 
-## Script Guide
+## Technologies Used
 
-| Script | Purpose |
+| Category | Tools |
 | --- | --- |
-| `01_load_expression.R` | Load GTEx expression data for downstream processing. |
-| `02_filter_genes.R` | Remove low-quality or uninformative genes. |
-| `03_select_variable_genes.R` | Select highly variable genes for network construction. |
-| `04_coexpression_network.R` | Compute gene-gene Pearson correlations. |
-| `05_build_network.R` | Build a thresholded co-expression edge list. |
-| `06_clean_gene_ids.R` | Clean and standardize gene identifiers. |
-| `07_filter_abc_links.R` | Filter ABC enhancer-gene interactions. |
-| `08_gene_id_conversion.R` | Convert gene identifiers for compatibility across datasets. |
-| `09_convert_network_symbols.R` | Map network gene IDs to gene symbols. |
-| `10_integrate_ABC_network.R` | Integrate ABC interactions with the co-expression network. |
-| `11_cytoscape_export.R` | Export network tables for Cytoscape visualization. |
-| `12_hub_gene_analysis.R` | Extract hub genes and network topology metrics. |
-| `13_enrichment_summary.R` | Create a compact enrichment findings table. |
-| `14_plot_results.R` | Generate publication-style hub gene plots. |
-| `15_hub_gene_regulatory_class_analysis.R` | Summarize hub gene regulatory classes and downstream interpretation. |
+| Programming | R, data.table, ggplot2 |
+| Transcriptomics | GTEx expression data |
+| Regulatory genomics | ABC enhancer-gene interactions |
+| Network analysis | Pearson correlation, Cytoscape topology metrics |
+| Functional enrichment | g:Profiler |
+| Visualization | Cytoscape, hub gene plots, enrichment plots |
 
 ---
 
 ## Future Directions
 
-- Parameterize file paths with a project-level configuration file.
-- Add an `renv.lock` file for exact R package reproducibility.
-- Export all final plots as PNG or SVG for inline GitHub rendering.
-- Add Cytoscape session files and style legends for reproducible visualization.
-- Include tissue-specific GTEx network comparisons.
-- Quantify overlap significance for RBPs, splicing factors, and transcription factors.
+- Add `renv.lock` for exact R package reproducibility.
+- Add a small demo dataset for reproducible public execution.
+- Add Cytoscape session files and visual style legends.
+- Quantify statistical overlap for RBPs, splicing factors, and transcription factors.
 - Add community detection to identify regulatory modules.
 - Compare hub genes with disease-associated gene sets or GWAS catalogs.
-- Package the workflow as a reproducible Snakemake or Nextflow pipeline.
+- Package the workflow as a Snakemake or Nextflow pipeline.
 
 ---
 
@@ -251,3 +206,6 @@ Overall, this analysis suggests that integrating enhancer-gene interaction maps 
 
 ---
 
+## LinkedIn-Ready Summary
+
+I developed an integrative multi-omics regulatory network analysis combining GTEx gene co-expression data with ABC enhancer-gene interaction maps to identify biologically meaningful regulatory hubs. After filtering highly variable genes, constructing a Pearson correlation-based co-expression network, integrating enhancer-gene links, and analyzing network topology in Cytoscape, the project identified central hub genes including `NONO`, `HNRNPK`, `HNRNPD`, `DHX9`, `PRPF8`, `TRA2B`, `KHDRBS1`, `SNRNP200`, `ACIN1`, and `SNW1`. Functional enrichment with g:Profiler revealed strong enrichment for RNA splicing, mRNA processing, KEGG spliceosome pathways, RNA-binding proteins, and post-transcriptional regulation, suggesting that the integrated GTEx-ABC network is organized around RNA regulatory mechanisms.
