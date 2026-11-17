@@ -255,17 +255,6 @@ Overall, this analysis suggests that integrating enhancer-gene interaction maps 
 - Compare hub genes with disease-associated gene sets or GWAS catalogs.
 - Package the workflow as a reproducible Snakemake or Nextflow pipeline.
 
-## ⭐ Suggested Repository Improvements
-
-- Add a graphical abstract summarizing GTEx co-expression, ABC integration, hub discovery, and enrichment analysis.
-- Create a `docs/methods.md` page with full parameter settings, thresholds, and dataset versions.
-- Add a `results/tables/top_hub_genes.csv` table with degree, betweenness, closeness, and regulatory class annotations.
-- Add publication-style figure captions under each README figure.
-- Include a short demo dataset so reviewers can run the workflow without controlled-access GTEx files.
-- Add a GitHub Actions workflow to lint R scripts and validate file structure.
-- Add a `CITATION.cff` file so the project is easy to cite in portfolios and applications.
-
----
 
 ## 📚 References
 
